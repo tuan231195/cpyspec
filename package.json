@@ -22,7 +22,7 @@
         "prettier:check": "prettier --check 'src/**/*.{ts,js}'",
         "validate": "run-s test lint prettier:check",
         "ci:validate": "rm -rf node_modules && npm ci && npm run validate",
-        "prepublishOnly": "npm run ci:validate && npm run build"
+        "prepublishOnly": "npm run validate && npm run build"
     },
     "author": "Tuan Nguyen <vdtn359@gmail.com>",
     "license": "ISC",
