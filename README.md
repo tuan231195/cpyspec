@@ -1,4 +1,4 @@
-# cpyspec
+# cpyspec ![CI Build](https://travis-ci.org/vdtn359/cpyspec.svg?branch=master)
 
 > Copy files using spec
 
@@ -20,20 +20,20 @@ const { copy } = require('cpyspec');
 
 (async () => {
 	await copy({
-	    verbose: true,
-        progress: true,
-        files: [
-            {
-                from: 'package.json',
-                to: 'build/package.json'
-            },
-            {
-                from: '**/*.js',
-                to: 'build',
-                context: 'src'
-            }
-        ]
-    });
+            verbose: true,
+            progress: true,
+            files: [
+                {
+                    from: 'package.json',
+                    to: 'build/package.json'
+                },
+                {
+                    from: '**/*.js',
+                    to: 'build',
+                    context: 'src'
+                }
+            ]
+        });
 })();
 ```
 
