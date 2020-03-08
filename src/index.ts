@@ -2,7 +2,7 @@ import cpy from 'cpy';
 import { ReportNotifier } from 'src/utils/report';
 import * as path from 'path';
 import { formatTime } from 'src/utils/time';
-import { flatten } from '../dist/utils/array';
+import { flatten } from 'src/utils/array';
 
 export type CopySpec = {
     verbose?: boolean;
@@ -28,7 +28,7 @@ const defaultCopySpec: CopySpec = {
 
 const defaultFileSpec: Partial<CopyFile> = {
     flatten: false,
-    overwrite: false,
+    overwrite: true,
     exclude: [],
     context: process.cwd(),
 };

@@ -1,3 +1,4 @@
+#! /usr/bin/env node
 import { exists, read } from 'src/utils/files';
 import * as path from 'path';
 import { CopySpec, copy } from 'src/index';
