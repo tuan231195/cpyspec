@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/vdtn359/cpyspec/compare/v1.0.0...v1.0.1) (2020-03-08)
+
+
+### Bug Fixes
+
+* **cmd:** change cmd name ([fe62fd8](https://github.com/vdtn359/cpyspec/commit/fe62fd8cb96de8155b03111113f15c42a3f2645f))
+
 # 1.0.0 (2020-03-08)
 
 
