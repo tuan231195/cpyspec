@@ -73,20 +73,19 @@ export async function copy(copySpec: CopySpec) {
                 }
             );
             if (copySpec.progress) {
-                const copiedFiles = await promise.on(
-                    'progress',
-                    progressData => {
-                        reportNotifier.onProgress(fileSpec, progressData);
-                    }
-                );
+                await promise.on('progress', progressData => {
+                    reportNotifier.onProgress(fileSpec, progressData);
+                });
+            }
+
+            return promise.then(copiedFiles => {
+                reportNotifier.stop();
                 if (copySpec.verbose) {
                     for (const copiedFile of copiedFiles) {
                         console.info(`Copied ${copiedFile}`);
                     }
                 }
-            }
-
-            return promise;
+            });
         })
     );
     const end = Date.now();

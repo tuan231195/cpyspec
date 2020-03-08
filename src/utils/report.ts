@@ -1,11 +1,21 @@
 import { CopyFile } from 'src/index';
 import { ProgressData } from 'cpy';
 import { sum } from 'src/utils/array';
+import cliProgress from 'cli-progress';
 
 export class ReportNotifier {
     private progressMap: Map<CopyFile, ProgressData>;
+    private cliProgress: cliProgress.SingleBar;
+    private started: boolean;
     constructor() {
         this.progressMap = new Map<CopyFile, ProgressData>();
+        this.cliProgress = new cliProgress.SingleBar(
+            {
+                clearOnComplete: true,
+            },
+            cliProgress.Presets.shades_classic
+        );
+        this.started = false;
     }
 
     onProgress(copyFileSpec: CopyFile, progressData: ProgressData) {
@@ -22,8 +32,20 @@ export class ReportNotifier {
     report() {
         const totalFiles = this.totalFiles();
         const totalCopiedFiles = this.totalCopiedFiles();
-        console.info(`Copied ${totalCopiedFiles}/${totalFiles}`);
+        if (!this.started) {
+            this.started = true;
+            this.cliProgress.start(totalFiles, totalCopiedFiles);
+        } else {
+            this.cliProgress.setTotal(totalFiles);
+            this.cliProgress.update(totalCopiedFiles);
+        }
     }
+
+    stop() {
+        this.started = false;
+        this.cliProgress.stop();
+    }
+
     totalFiles() {
         return sum(this.progressMap.values(), 'totalFiles');
     }
