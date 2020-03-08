@@ -2,6 +2,7 @@ import cpy from 'cpy';
 import { ReportNotifier } from 'src/utils/report';
 import * as path from 'path';
 import { formatTime } from 'src/utils/time';
+import { flatten } from '../dist/utils/array';
 
 export type CopySpec = {
     verbose?: boolean;
@@ -36,7 +37,7 @@ export async function copy(copySpec: CopySpec) {
     const start = Date.now();
     copySpec = { ...defaultCopySpec, ...copySpec };
     const reportNotifier = new ReportNotifier();
-    await Promise.all(
+    const result = await Promise.all(
         copySpec.files.map(async fileSpec => {
             fileSpec = { ...defaultFileSpec, ...fileSpec };
             if (!Array.isArray(fileSpec.exclude)) {
@@ -78,16 +79,22 @@ export async function copy(copySpec: CopySpec) {
                 });
             }
 
-            return promise.then(copiedFiles => {
-                reportNotifier.stop();
-                if (copySpec.verbose) {
-                    for (const copiedFile of copiedFiles) {
-                        console.info(`Copied ${copiedFile}`);
-                    }
-                }
-            });
+            return promise;
         })
-    );
+    )
+        .then(result => {
+            reportNotifier.stop();
+            const copiedFiles = flatten(result.filter(element => element));
+            if (copySpec.verbose) {
+                for (const copiedFile of copiedFiles) {
+                    console.info(`Copied ${copiedFile}`);
+                }
+            }
+            return copiedFiles;
+        })
+        .catch(() => {
+            reportNotifier.stop();
+        });
     const end = Date.now();
     if (copySpec.verbose) {
         console.info(
@@ -96,4 +103,5 @@ export async function copy(copySpec: CopySpec) {
             )}`
         );
     }
+    return result;
 }
