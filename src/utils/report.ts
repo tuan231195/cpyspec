@@ -18,14 +18,21 @@ export class ReportNotifier {
         this.started = false;
     }
 
-    onProgress(copyFileSpec: CopyFile, progressData: ProgressData) {
+    onProgress(
+        copyFileSpec: CopyFile,
+        progressData: ProgressData,
+        showProgress: boolean
+    ) {
         const oldProgressData = this.progressMap.get(copyFileSpec);
         this.progressMap.set(copyFileSpec, progressData);
-        if (
-            oldProgressData?.completedFiles != progressData.completedFiles ||
-            oldProgressData?.totalFiles != progressData.totalFiles
-        ) {
-            this.report();
+        if (showProgress) {
+            if (
+                oldProgressData?.completedFiles !=
+                    progressData.completedFiles ||
+                oldProgressData?.totalFiles != progressData.totalFiles
+            ) {
+                this.report();
+            }
         }
     }
 

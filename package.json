@@ -76,6 +76,7 @@
     },
     "dependencies": {
         "cli-progress": "3.6.0",
-        "cpy": "8.1.0"
+        "cpy": "8.1.0",
+        "is-glob": "4.0.1"
     }
 }

@@ -3,6 +3,8 @@ import { ReportNotifier } from 'src/utils/report';
 import * as path from 'path';
 import { formatTime } from 'src/utils/time';
 import { flatten } from 'src/utils/array';
+import isGlob from 'is-glob';
+import * as fs from 'fs';
 
 export type CopySpec = {
     verbose?: boolean;
@@ -43,7 +45,20 @@ export async function copy(copySpec: CopySpec) {
             if (!Array.isArray(fileSpec.exclude)) {
                 fileSpec.exclude = [fileSpec.exclude as string];
             }
-            const isDir = !path.extname(fileSpec.to);
+            const fileValidationResult = validateFile(fileSpec.from);
+            if (!fileValidationResult.exists) {
+                if (copySpec.verbose) {
+                    console.error(`File ${fileSpec.from} does not exist`);
+                }
+                return;
+            }
+            const destinationBaseName = path.basename(fileSpec.to);
+            const sourceBaseName = path.basename(fileSpec.from);
+            const isDir =
+                !path.extname(fileSpec.to) &&
+                !isUsingPlaceholder(fileSpec.to) &&
+                (!fileValidationResult.isFile ||
+                    sourceBaseName !== destinationBaseName);
             const dest = isDir
                 ? path.resolve(fileSpec.to)
                 : path.dirname(path.resolve(fileSpec.to));
@@ -73,11 +88,13 @@ export async function copy(copySpec: CopySpec) {
                     concurrency: fileSpec.concurrency,
                 }
             );
-            if (copySpec.progress) {
-                await promise.on('progress', progressData => {
-                    reportNotifier.onProgress(fileSpec, progressData);
-                });
-            }
+            await promise.on('progress', progressData => {
+                reportNotifier.onProgress(
+                    fileSpec,
+                    progressData,
+                    !!copySpec.progress
+                );
+            });
 
             return promise;
         })
@@ -104,4 +121,28 @@ export async function copy(copySpec: CopySpec) {
         );
     }
     return result;
+}
+
+function isUsingPlaceholder(name) {
+    const placeholders = ['[name]', '[ext]'];
+    return placeholders.some(placeholder => name.includes(placeholder));
+}
+
+function validateFile(from) {
+    const isGlobPattern = isGlob(from);
+    if (!isGlobPattern) {
+        try {
+            return {
+                exists: true,
+                isFile: fs.statSync(from).isFile(),
+            };
+        } catch (e) {
+            return {
+                exists: false,
+            };
+        }
+    }
+    return {
+        exists: true,
+    };
 }
