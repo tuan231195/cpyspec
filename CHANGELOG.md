@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/vdtn359/cpyspec/compare/v1.0.2...v1.0.3) (2020-03-11)
+
+
+### Bug Fixes
+
+* **copy:** use file spec context ([8b624b2](https://github.com/vdtn359/cpyspec/commit/8b624b2be32fbb121f921a3bacf9403b9289efc1))
+
 ## [1.0.2](https://github.com/vdtn359/cpyspec/compare/v1.0.1...v1.0.2) (2020-03-10)
 
 
