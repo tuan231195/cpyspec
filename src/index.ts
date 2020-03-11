@@ -45,7 +45,10 @@ export async function copy(copySpec: CopySpec) {
             if (!Array.isArray(fileSpec.exclude)) {
                 fileSpec.exclude = [fileSpec.exclude as string];
             }
-            const fileValidationResult = validateFile(fileSpec.from);
+            const fileValidationResult = validateFile(
+                fileSpec.from,
+                fileSpec.context
+            );
             if (!fileValidationResult.exists) {
                 if (copySpec.verbose) {
                     console.error(`File ${fileSpec.from} does not exist`);
@@ -128,13 +131,13 @@ function isUsingPlaceholder(name) {
     return placeholders.some(placeholder => name.includes(placeholder));
 }
 
-function validateFile(from) {
+function validateFile(from, context = process.cwd()) {
     const isGlobPattern = isGlob(from);
     if (!isGlobPattern) {
         try {
             return {
                 exists: true,
-                isFile: fs.statSync(from).isFile(),
+                isFile: fs.statSync(path.resolve(context, from)).isFile(),
             };
         } catch (e) {
             return {
