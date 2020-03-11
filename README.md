@@ -1,4 +1,5 @@
-# cpyspec ![CI Build](https://travis-ci.org/vdtn359/cpyspec.svg?branch=master)
+![CI Build](https://travis-ci.org/vdtn359/cpyspec.svg?branch=master) ![Version Badge](https://badge.fury.io/js/cpyspec.svg)
+# cpyspec
 
 > Copy files using spec
 
