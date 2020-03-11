@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/vdtn359/cpyspec/compare/v1.0.1...v1.0.2) (2020-03-10)
+
+
+### Bug Fixes
+
+* **copy:** improve file handling ([15d4460](https://github.com/vdtn359/cpyspec/commit/15d44606f450ef7cfae0a7570ce396bd9bfc10c1))
+
 ## [1.0.1](https://github.com/vdtn359/cpyspec/compare/v1.0.0...v1.0.1) (2020-03-08)
 
 
